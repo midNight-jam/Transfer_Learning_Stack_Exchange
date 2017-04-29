@@ -1,0 +1,135 @@
+"id","title","content","tags"
+"3","What are the benefits of the two permutation tables in DES?","<p>Why do we use a permutation table in the first step of <a href=""http://en.wikipedia.org/wiki/Data_Encryption_Standard"" rel=""nofollow"">DES algorithm</a> and one at the end of the algorithm?</p>
+","block-cipher des permutation"
+"7","Why use a 1-2 Oblivious Transfer instead of a 1 out of n Oblivious Transfer?","<p>When initiating an <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer"">oblivious transfer</a>, why would someone use a <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer#1-2_oblivious_transfer"">1-2 oblivious transfer</a> rather than going for an <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer#1-out-of-n_oblivious_transfer_and_k-out-of-n_oblivious_transfer"">1 out of n oblivious transfer</a>? Perhaps a slight time overhead for the extra message encrypts, but with everything as fast as it is these days is that a concern?</p>
+","oblivious-transfer multiparty-computation function-evaluation"
+"8","Why do we append the length of the message in SHA-1 pre-processing?","<p>As we know, <a href=""http://en.wikipedia.org/wiki/SHA-1"">SHA-1</a> is irreversible, so why do we append the length of the message to the preimage?</p>
+","sha-1 hash"
+"9","What is the general justification for the hardness of finding preimages for cryptographic hash functions?","<p>Since most cryptographic hash functions are simple, compact constructions does this simplicity impose a limit on the complexity and the size of a function that can generate preimages? That is, given a cryptographic hash function, <strong>H</strong> of some length and complexity can we lower or upper bound the complexity/size of a function that finds preimages of <strong>H</strong>. If not, why not?</p>
+
+<p>If the upper bound on the size of a function that efficiently finds a preimage of <strong>H</strong> is smaller than the output size of <strong>H</strong> and then this has implications for the strength of the hash function. How can we justify that such an efficient preimage finding function must be larger than the output size?</p>
+","hash cryptanalysis preimage-resistance"
+"14","How can I use asymmetric encryption, such as RSA, to encrypt an arbitrary length of plaintext?","<p>RSA is not designed to be used on long blocks of plaintext like a block cipher, but I need to use it to send a large (encrypted) message.</p>
+
+<p>How can I do this?</p>
+","encryption rsa public-key"
+"16","How were the DES S-box values determined?","<p>It seems like the S-boxes in <a href=""http://en.wikipedia.org/wiki/Data_Encryption_Standard"">DES</a> have essentially random values.</p>
+
+<p>How were these chosen?</p>
+","des encryption s-boxes"
+"17","How to provide secure ""vanity"" bitcoin address service?","<p><a href=""http://www.bitcoin.org/"" rel=""nofollow"">Bitcoin</a> addresses are RIPEMD-160 hashes of the public portion of a public/private ECDSA keypair (along with an abbreviated hash of the hash to provide a check code, as @pulpspy notes in a comment).  They are generally base-58-encoded.  See <a href=""https://en.bitcoin.it/wiki/Address"" rel=""nofollow"">Address - Bitcoin</a></p>
+
+<p>In <a href=""http://forum.bitcoin.org/index.php?topic=1387.msg15868#msg15868"" rel=""nofollow""><em>Vanity bitcoin addresses: a new way to keep your CPU busy</em></a>, user ""ByteCoin"" says he can create and sell ""vanity"" bitcoin addresses (like <code>1ByteCoinsUNJun4KL3HSt1NfFdXpzoRTy</code>) for people.  Furthermore, he states he can use a handshake algorithm to do so without actually getting access to the associated private key (and thus without being able to spend bitcoins which are sent to the address).</p>
+
+<p>What is a fast algorithm for creating vanity bitcoin addresses?  Can they in fact be created and sold in a secure way?</p>
+","dsa bitcoin digital-cash ripemd"
+"18","How can a random salt for a hash function work in practice?","<p>I understand the theory behind the use salts in hash functions, but when I see it  implemented, the implementations always generate the salt on the fly and the salt appears to be different for every hash. </p>
+
+<ul>
+<li><p>When implementing a salt for users signing into a website, doesn't the salt need to be the same at account creation as the salt used when the user wants to log in? </p></li>
+<li><p>In implementation, wouldn't the salt be the same every time? </p></li>
+<li><p>I understand that the salt may be different from user to user (in my example), but when user A signs in on Monday, and again on Friday, wouldn't the salt need to be the same for both those times?</p></li>
+</ul>
+","hash implementation salt"
+"20","What are the practical differences between 256-bit, 192-bit, and 128-bit AES encryption?","<p>AES has several different variants:</p>
+
+<ul>
+<li>AES-128</li>
+<li>AES-192</li>
+<li>AES-256</li>
+</ul>
+
+<p>But why would someone prefer use one over another?</p>
+","encryption aes block-cipher key-size"
+"24","What makes a hash function good for password hashing?","<p>Using a cryptographic hash to store e.g. passwords in a database is considered good practice (as opposed to storing them plaintext), but is subject to attacks on said cryptographic hash, assuming the database is compromised.</p>
+
+<p>Which properties of a cryptographic hash function make it suitable for hashing passwords and the like?</p>
+
+<p>Which functions are secure enough, while still being widely available, without patent issues and not too computationally intensive?</p>
+","hash passwords"
+"27","How do I apply differential cryptanalysis to a block cipher?","<p>I have read a lot of summaries of block ciphers particularly with regards to the NIST competitions stating that reduced-round block ciphers are – for example – vulnerable to differential cryptanalysis.</p>
+
+<p>I have a general idea that the application of differential cryptanalysis is to look at the difference between inputs; <a href=""http://en.wikipedia.org/wiki/Differential_Cryptanalysis"" rel=""nofollow"">Wikipedia</a> makes that fairly clear. However, I could take any two inputs for any given block cipher and I am pretty certain I'd be staring at random differences. </p>
+
+<ul>
+<li>I am aware this is the idea of a well written block cipher; however, assuming a broken or vulnerable cipher (feel free to provide simple examples) how do I go about choosing differences to try? </li>
+<li>Are there any clues in algorithm design that would inform a decision on which values to choose? </li>
+<li>How does being vulnerable to differential cryptanalysis impact a cipher in the wild? </li>
+<li>If all I have are differences between known plain-texts and known keys as my analysis and a captured ciphertext as my data to exploit, what can I actually deduce?</li>
+</ul>
+","cryptanalysis block-cipher differential-analysis"
+"31","Current mathematics theory used in cryptography/coding theory","<p>What are the mainstream techniques borrowed from algebraic geometry (or some other branch of mathematics) which are currently used in cryptography/coding theory? I've only heard about a small subset of elliptic curves and hermitian curves. I've also heard about research of hyperelliptic curves but I don't know if some software has already implemented it.</p>
+
+<p>Could you mention some other branches of mathematics being strongly used in cryptography/coding theory and its state? (mainstream/in research)</p>
+","coding-theory elliptic-curves hermitian-curves"
+"32","How can SSL secure a two-way communication with only one key-pair?","<p>As I understand it, SSL involved the use of a public-private key pair.  How does this enable two-way communication?</p>
+
+<p>Suppose I have some server with which I wish to communicate securely.  I connect to it, and it supplies me a certificate, which contains its public key (assume the certificate is valid).  I then take my request, and encrypt it with this public key, and transmit the resultant ciphertext to the server.   This communication is secure from eavesdropping.  But how does the server return to me my results securely?  I lack a public/private key pair, and have no certificates.  </p>
+","encryption tls public-key keys"
+"34","Necessity of Randomness of Salts?","<p>Given the desire to have unique salts for each user of your system, is it actually necessary to create a cryptographically-random salt for each user?</p>
+
+<p>If your system already has some other unique user identifier (be it an ID, user-name, or an Email address) is there any effective decrease in your security if you simply use that value as your salt? It results in a unique salt for each user, and does not require the additional generation and tracking of a new value per user.</p>
+","hash salt randomness"
+"36","What are the main weaknesses of a Playfair cipher, if any?","<p>What are the main weaknesses of a <a href=""http://en.wikipedia.org/wiki/Playfair_cipher"" rel=""nofollow"">Playfair cipher</a>, if any?</p>
+
+<p>I know that they depend on none of the letters missing, but that is an easy fix if a letter gets dropped. Besides that, are there any other problems with it?</p>
+","cryptanalysis classical-cipher substitution-cipher playfair"
+"43","Salting when encrypting?","<p>I was attending a database encryption session at a developers conference. The presenter (who was a published author on the subject) said that MS SQL Server did not support salted hashes in the database, but it does support salting with encryption. This was the first I heard of salting in encryption. I asked for clarification to make sure that was what he was saying.</p>
+
+<p>Is this something anyone else has heard of before? Is this an important practice that I have just never heard of before?</p>
+","encryption salt database"
+"47","With sufficient randomness, is XOR an acceptable mechanism for encrypting?","<p>I have heard criticism of various cryptosystems saying that ""at their heart, they were just XOR.""</p>
+
+<p>Is this just ignorance, or is there something inherently wrong with XOR based ciphers?</p>
+","xor stream-cipher"
+"48","Is it feasible to build a stream cipher from a cryptographic hash function?","<p>A few years ago I devised a symmetric-key system that worked like so:</p>
+
+<pre><code>H()   = some hashing function
+h     = the number of bits in the result of H()
+key   = bits to be used as a key
+^     = the XOR operation
++     = concatenation
+len() = the length function (in bits)
+
+max = ceiling(len(cipertext) / h)
+pad = pad_0 + ... + pad_max
+pad_0 = H(key) ^ H(plaintext)
+pad_n = H(pad_(n-1))
+cipherpart_n = plaintext_n ^ pad_n
+ciphertext = H(plaintext) + cipherpart_0  + ... cipherpart_max
+</code></pre>
+
+<p>Basically, it builds up a ""pad"" based on the hash of the message and hash of the key and XORs the message against it.</p>
+
+<p>I am not actually an expert, so I was wondering why an approach like this isn't very common.</p>
+","encryption hash block-cipher stream-cipher"
+"55","Known methods for constant time (table-free) AES implementation using 'standard' operations?","<p>There are several known methods for implementing AES in constant time using SIMD operations, mostly based around fast byte shuffling (for instance <a href=""http://crypto.stanford.edu/vpaes/"">Hamburg</a> and <a href=""http://homes.esat.kuleuven.be/~ekasper/papers/fast_aes_slides.pdf"">Kasper/Schwabe</a>). Are there any similar approaches that allow a constant-time AES to be implemented using only standard C operations? The closest thing I've seen is this <a href=""http://www.literatecode.com/2007/11/11/aes256/"">byte oriented</a> AES implementation, but it uses input-dependent loops to compute logarithms and exponents for the sbox.</p>
+","implementation aes side-channel-attack timing-attack"
+"59","Taking advantage of one-time pad key reuse?","<p>Suppose Alice wants to send encryptions (under a one-time pad) of $m_1$ and $m_2$ to Bob over a public channel.  Alice and Bob have a shared key $k$; however, both messages are the same length as the key $k$.  Since Alice is extraordinary lazy (and doesn't know about stream ciphers), she decides to just reuse the key.</p>
+
+<p>Alice sends ciphertexts $c_1 = m_1 \oplus k$ and $c_2 = m_2 \oplus k$ to Bob through a public channel.  Unfortunately, Eve intercepts both of these ciphertexts and calculates $c_1 \oplus c_2 = m_1 \oplus m_2$.</p>
+
+<blockquote>
+  <p>What can Eve do with $m_1 \oplus m_2$?  </p>
+</blockquote>
+
+<p>Intuitively, it makes sense that Alice and Bob would not want $m_1 \oplus m_2$ to fall into Eve's hands, but how exactly should Eve continue with her attack?</p>
+","cryptanalysis one-time-pad key-reuse"
+"66","What are the details of the DES weakness of reusing the same IV in CBC mode with the same key?","<p>I think I once faced the recommendation, that the initialization vector should always be random and never be used twice with the same key.</p>
+
+<p>How serious is this weakness?</p>
+
+<p>Also, is AES less effected than DES?</p>
+","encryption des modes-of-operation cbc"
+"70","Protocol to generate Client Certificates at the start of a SSL session automatically?","<p>A more secure form of 'cookie' could be created for SSL communications through the following method.</p>
+
+<ul>
+<li><p>The client generates and requests the server to sign a certificate.</p></li>
+<li><p>Then the client authenticates to the https server using the client certificate.</p></li>
+<li><p>Additional basic auth is used to tie the client certificate to the site credentials.</p></li>
+</ul>
+
+<p>That would allow the 'client computer' to be able to prove it's identity (knowledge of private key) to the server (also assuming that the server certificate is authenticated using PKI).</p>
+
+<p>I am not aware of this protocol being used, advantages? disadvantages? or is it just pointless because cookies give us enough security?</p>
+","public-key protocol-design tls"
