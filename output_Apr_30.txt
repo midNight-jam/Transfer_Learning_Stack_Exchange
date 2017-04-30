@@ -1,0 +1,149 @@
+jayam@jayam-Inspiron-5521:~/GIT/Transfer_Learning_Stack_Exchange$ python main.py 
+reading file ./data/biology.csv
+finished processing file : ./data/biology.csv
+reading file ./data/cooking.csv
+finished processing file : ./data/cooking.csv
+reading file ./data/crypto.csv
+finished processing file : ./data/crypto.csv
+reading file ./data/diy.csv
+finished processing file : ./data/diy.csv
+reading file ./data/robotics.csv
+finished processing file : ./data/robotics.csv
+reading file ./data/travel.csv
+finished processing file : ./data/travel.csv
+Data inside Dataframe for files ['./data/biology.csv', './data/cooking.csv', './data/crypto.csv', './data/diy.csv', './data/robotics.csv', './data/travel.csv']
+                                                tags  \
+0                                             [tags]   
+1  [ribosome, binding-sites, translation, synthet...   
+2                                [rna, biochemistry]   
+3             [immunology, cell-biology, hematology]   
+4                                     [cell-culture]   
+
+                                                text  
+0                                       titlecontent  
+1  criticality ribosome binding site relative sta...  
+2  rnase contamination  based experiments prevent...  
+3  lymphocyte sizes clustered  groups  tortora wr...  
+4  long antibiotic dosed  maintain good selection...  
+No of documents, features : (87006, 2)
+Number of unique words : 107612
+Number of unique tags : 4269
+============ tag Dictionary ============ 
+schengen , 2918
+product-review , 2118
+scl , 3530
+biopython , 615
+mcx , 4097
+============ /tag Dictionary/ ============ 
+============ tag Freq Dictionary ============ 
+schengen , 1561
+product-review , 7
+scl , 4
+biopython , 7
+mcx , 1
+============ /tag Freq Dictionary/ ============ 
+=========================Csr Matrix=========================
+  (0, 0)	1
+  (1, 1)	1
+  (1, 2)	2
+  (1, 3)	2
+  (1, 4)	2
+  (1, 5)	2
+  (1, 6)	3
+  (1, 7)	2
+  (1, 8)	2
+  (1, 9)	4
+  (1, 10)	1
+  (1, 11)	1
+  (1, 12)	1
+  (1, 13)	1
+  (1, 14)	1
+  (1, 15)	2
+  (1, 16)	1
+  (1, 17)	1
+  (1, 18)	1
+  (1, 19)	1
+  (1, 20)	1
+  (2, 21)	3
+  (2, 22)	2
+  (2, 23)	1
+  (2, 24)	1
+  :	:
+  (87004, 45961)	1
+  (87004, 60193)	1
+  (87004, 80751)	4
+  (87005, 137)	2
+  (87005, 138)	2
+  (87005, 185)	1
+  (87005, 275)	1
+  (87005, 351)	2
+  (87005, 389)	1
+  (87005, 449)	1
+  (87005, 1968)	2
+  (87005, 2113)	1
+  (87005, 2277)	1
+  (87005, 3448)	2
+  (87005, 3512)	2
+  (87005, 3880)	1
+  (87005, 6432)	2
+  (87005, 9090)	3
+  (87005, 10059)	1
+  (87005, 20873)	1
+  (87005, 20969)	1
+  (87005, 28465)	2
+  (87005, 64696)	3
+  (87005, 93084)	2
+  (87005, 105339)	1
+=========================TAGS Csr Matrix=========================
+  (0, 0)	1
+  (1, 1)	1
+  (1, 2)	1
+  (1, 3)	1
+  (1, 4)	1
+  (2, 5)	1
+  (2, 6)	1
+  (3, 7)	1
+  (3, 8)	1
+  (3, 9)	1
+  (4, 10)	1
+  (5, 11)	1
+  (5, 12)	1
+  (5, 13)	1
+  (5, 14)	1
+  (5, 15)	1
+  (6, 6)	1
+  (6, 16)	1
+  (6, 17)	1
+  (7, 18)	1
+  (7, 19)	1
+  (8, 20)	1
+  (9, 21)	1
+  (9, 22)	1
+  (9, 23)	1
+  :	:
+  (86999, 3146)	1
+  (86999, 3481)	1
+  (86999, 4181)	1
+  (87000, 2678)	1
+  (87000, 2713)	1
+  (87000, 2860)	1
+  (87000, 3117)	1
+  (87000, 3756)	1
+  (87001, 2683)	1
+  (87001, 2814)	1
+  (87001, 2864)	1
+  (87001, 2950)	1
+  (87001, 3299)	1
+  (87002, 2361)	1
+  (87002, 2741)	1
+  (87002, 2813)	1
+  (87002, 2861)	1
+  (87002, 3023)	1
+  (87003, 2860)	1
+  (87003, 2867)	1
+  (87003, 2869)	1
+  (87003, 3036)	1
+  (87004, 2694)	1
+  (87004, 3095)	1
+  (87005, 597)	1
+
