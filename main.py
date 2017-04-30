@@ -111,6 +111,8 @@ def main():
   head_dict(tag_dict, 5)
   head_dict(tag_freq, 5)
 
+
+
   # # test = readTestFile()
   # print('=========================TEST=========================')
   # count = 0
