@@ -3,9 +3,11 @@ import pandas as pd
 from nltk.corpus import stopwords
 import re
 from scipy.sparse import coo_matrix
+from sklearn.decomposition import PCA
+
+###### global vars here ######
 
 cachedStopWords = stopwords.words("english")
-# global vars here
 word_dict = {}
 word_freq = {}
 
@@ -23,7 +25,7 @@ tags_col_array = []
 tags_row_array = []
 tags_val_array = []
 
-#  global vars ends here
+######  global vars ends here ######
 
 def readTestFile():
   file = './data/test.csv'
@@ -52,12 +54,9 @@ def readTrain(file):
   data_frame = pd.read_csv(file, names = ['id','title','content','tags'])
   data_frame['title'] = data_frame['title'].apply(lambda x : x.decode('utf-8'))
   data_frame['content'] = data_frame['content'].apply(lambda x : x.decode('utf-8'))
-
   data_frame['text'] = data_frame[['title', 'content']].apply(lambda x : ''.join(x), axis = 1)
-
   data_frame['text'] = data_frame['text'].apply(lambda x : removestopword(x))
   data_frame['text'] = data_frame['text'].apply(lambda x : replace_special_character(x))
-
   # data_frame['content'] = data_frame['content'].apply(lambda x: removestopword(x))
   # data_frame['content'] = data_frame['content'].apply(lambda x: replace_special_character(x))
   data_frame['tags'] = data_frame['tags'].apply(lambda x : x.split(' '))
@@ -68,8 +67,8 @@ def readTrain(file):
   return data_frame
 
 def readTrainingDataSet():
-  # files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
-  files = ['./data/cooking_short.csv','./data/crypto_short.csv']
+  files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
+  #files = ['./data/cooking_short.csv','./data/crypto_short.csv']
   train_data_frames = []
   for f in files:
     train_data_frames.append(readTrain(f))
@@ -145,7 +144,18 @@ def create_coo_data(data_frame):
 
 def create_csr_matrix(coo_cols_array,coo_rows_array,coo_vals_array, rows, cols):
   csr_matrix = coo_matrix((coo_vals_array,(coo_rows_array, coo_cols_array)), shape = (rows, cols)).tocsr()
+  csr_matrix
   return csr_matrix
+
+from sklearn.decomposition import TruncatedSVD
+def svd_dr(X):
+  print('Old Shape : {}'.format(X.shape))
+  svd = TruncatedSVD(n_components=10000, n_iter=7, random_state=42)
+  svd.fit(X)
+  print(svd.explained_variance_ratio_)
+  X_new = svd.fit_transform(X)
+  print('New Shape : {}'.format(X_new.shape))
+  return X_new
 
 def main():
   train_data_frame = readTrainingDataSet()
@@ -153,6 +163,7 @@ def main():
   print('No of documents, features : {}'.format(train_data_frame.shape))
   create_feature_ids(train_data_frame)
   print('Number of unique words : {}'.format(len(word_dict)))
+  print('Number of unique tags : {}'.format(len(tag_dict)))
   head_dict(tag_dict, 5,'tag Dictionary')
   head_dict(tag_freq, 5,'tag Freq Dictionary')
 
@@ -166,7 +177,6 @@ def main():
   print('=========================Csr Matrix=========================')
   print('{}'.format(text_csr_matrix ))
 
-
   tag_coo_col_array = np.asarray(tags_col_array)
   tag_coo_row_array = np.asarray(tags_row_array)
   tag_coo_val_array = np.asarray(tags_val_array)
@@ -175,6 +185,10 @@ def main():
   tag_csr_matrix = create_csr_matrix(tag_coo_col_array, tag_coo_row_array, tag_coo_val_array, tag_totalRows, tag_totalFeatures)
   print('=========================TAGS Csr Matrix=========================')
   print('{}'.format(tag_csr_matrix))
+  reduced_csr = svd_dr(text_csr_matrix)
+
+  print('=========================Reduced Csr Matrix=========================')
+  print('{}'.format(reduced_csr))
 
   # # test = readTestFile()
   # print('=========================TEST=========================')
