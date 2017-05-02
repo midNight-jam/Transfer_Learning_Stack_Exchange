@@ -6,6 +6,13 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.utils import shuffle
+from sklearn.model_selection import ShuffleSplit
+from sklearn import linear_model
+from sklearn.pipeline import Pipeline
+from nltk.tokenize import TreebankWordTokenizer
+from skmultilearn.problem_transform import BinaryRelevance
+from sklearn.metrics import accuracy_score
 
 cachedStopWords = stopwords.words("english")
 
@@ -76,7 +83,7 @@ def readTrainingDataSet():
   print('Data inside Dataframe for files {}'.format(files))
   data_frame = pd.concat(train_data_frames)
 
-  return data_frame, data_frame['tags'].values
+  return data_frame['text'].values, data_frame['tags'].values
   # vectorizer = CountVectorizer(min_df=1, max_features=155190)
   # X = vectorizer.fit_transform(data_frame['text'].values)
   # transformer = TfidfTransformer(smooth_idf=False)
@@ -84,6 +91,22 @@ def readTrainingDataSet():
   # Y = vectorizer.fit_transform(data_frame['tags'].values)
   # tfidf_tags = transformer.fit_transform(Y)
   # return tfidf_text, tfidf_tags
+
+def readTestDataSet():
+  # file = './data/test.csv'
+  file ='./data/cooking_short.csv'
+  data_frame = pd.read_csv(file, names=['id', 'title', 'content'])
+  print('finished reading files ... ')
+  data_frame = pd.read_csv(file, names=['id', 'title', 'content'])
+  data_frame['text'] = data_frame[['title', 'content']].apply(lambda x: ''.join(x), axis=1)
+  data_frame['text'] = data_frame['text'].apply(lambda x: remove_smileys(x))
+  data_frame['text'] = data_frame['text'].apply(lambda x: replace_url(x))
+  data_frame['text'] = data_frame['text'].apply(lambda x: remove_stopwords(x))
+  data_frame.drop('title', 1, inplace=True)
+  data_frame.drop('content', 1, inplace=True)
+  data_frame.drop('id', 1, inplace=True)
+  print('finished cleaning Test data')
+  return data_frame['text'].values
 
 def head_dict(dict, n, title):
   print('============ {} ============ '.format(title))
@@ -94,20 +117,50 @@ def head_dict(dict, n, title):
     n -=1
   print('============ /{}/ ============ '.format(title))
 
-def classify_labels(train_X, train_Y):
+def classify_labels(train_X, train_Y, test_X):
   y_train = MultiLabelBinarizer().fit_transform(train_Y)
-  print(y_train)
-  print('Y_train shape {}'.format(y_train.shape))
+  x_train, y_train = shuffle(train_X, y_train)
+  x_test = np.array(test_X)
+  kf = ShuffleSplit(n_splits=5, random_state=0)
+  cls = linear_model.SGDClassifier(loss='hinge', alpha=1e-3,
+                                   n_iter=500, random_state=None, learning_rate='optimal')
+  classifier = Pipeline([
+    ('vectorizer', CountVectorizer(ngram_range=(1, 2), tokenizer=TreebankWordTokenizer().tokenize)),
+    ('clf', BinaryRelevance(classifier=cls, require_dense=[False, True]))])
+  predicted_final = None
+  score = 0.0
+  # print(classifier)
+  classifier.fit(x_train, y_train)
+  predicted_final  = classifier.predict(x_test)
+  print('predicted final {}'.format(predicted_final))
+  print(predicted_final)
+  for train_index, test_index in kf.split(x_train, y_train):
+    print(train_index)
+    print(test_index)
+    classifier.fit(x_train[train_index], y_train[train_index])
+    predicted = classifier.predict(x_test)
+    print(predicted)
+    current_score = accuracy_score(x_test, predicted, normalize= True)
+    if(current_score > score):
+      score = current_score
+      print('Accuracy : {}',format(score))
+      predicted_final = predicted
+    temp = predicted_final
+    print(temp)
 
-  print(train_X)
-  print('X_train shape {}'.format(train_X.shape))
+
+  # print(classifier)
+  # print('Y_train shape {}'.format(y_train.shape))
+  # print(train_X)
+  # print('X_train shape {}'.format(train_X.shape))
 
 def main():
   train_X, train_Y = readTrainingDataSet()
-  classify_labels(train_X, train_Y)
-  print(train_X.head)
-  print('============ {} ============ '.format('text'))
-  # print(tfidf_text)
+  test_X = readTestDataSet()
+  classify_labels(train_X, train_Y, test_X)
+  # print(train_X)
+  # print(train_Y)
+  # print(test_X)
 
 if __name__ == '__main__':
   main()

@@ -57,6 +57,7 @@ def readTrain(file):
   data_frame['text'] = data_frame[['title', 'content']].apply(lambda x : ''.join(x), axis = 1)
   data_frame['text'] = data_frame['text'].apply(lambda x : removestopword(x))
   data_frame['text'] = data_frame['text'].apply(lambda x : replace_special_character(x))
+  data_frame['text'] = data_frame['text'].apply(lambda x : replace_special_character(x))
   # data_frame['content'] = data_frame['content'].apply(lambda x: removestopword(x))
   # data_frame['content'] = data_frame['content'].apply(lambda x: replace_special_character(x))
   data_frame['tags'] = data_frame['tags'].apply(lambda x : x.split(' '))
