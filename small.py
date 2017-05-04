@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.model_selection import train_test_split
-
+from sklearn.linear_model import LogisticRegression
 
 cachedStopWords = stopwords.words("english")
 emoji_pattern = re.compile("["
@@ -85,7 +85,11 @@ def readTrainingDataSet_Split_80_20():
   return split_80['text'].values, split_80['tags'].values, split_20['text'].values, split_20['tags'].values
 
 def readTrainingDataSet():
-  files = ['./data/tiny.csv']
+  # files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
+  files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv']
+  # files = ['./data/cooking_short.csv', './data/crypto_short.csv']
+  # files = ['./data/cooking_short_train.csv']
+  # files = ['./data/tiny.csv']
   train_data_frames = []
   for f in files:
     train_data_frames.append(readTrain(f))
@@ -93,24 +97,115 @@ def readTrainingDataSet():
   data_frame = pd.concat(train_data_frames)
   return data_frame['text'].values, data_frame['tags'].values
 
-def main():
-  # X_train, Y_train, X_test, Y_test = readTrainingDataSet()
-  X, Y = readTrainingDataSet()
-  print('Origianl X shape ; {}'.format(X.shape))
-  print('Origianl Y shape ; {}'.format(Y.shape))
-  X_train, X_test, Y_train,  Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+def oneVsRest_SVCLinear(X_train, X_test, Y_train, Y_test, word_dict, tags_dict ):
 
-
-  print('X_train shape : {}'.format(X_train.shape))
-  # print(X_train)
-  print('Y_train shape : {}'.format(Y_train.shape))
-  print(Y_train)
+  original_labels = Y_test
   print('Oroginal Labels')
-  print(Y_test)
+  print(original_labels)
+  print('-' * 50)
+
+  vectorizer = CountVectorizer(min_df=1, vocabulary=word_dict)
+  X_v_train = vectorizer.fit_transform(X_train)
+  X_v_test = vectorizer.fit_transform(X_test)
+
+  # print('X_vect_train shape : {}'.format(X_v_train.shape))
+  # print('X_v_train {}'.format(X_v_train.toarray()))
+  # print('-'*50)
+  # print('X_vect_test shape : {}'.format(X_v_test.shape))
+  # print('X_v_test {}'.format(X_v_test.toarray()))
+  # print('-'*50)
+
+
+  uniq_tags_names = list(tags_dict.keys())
+
+  # print('unique {}'.format(uniq_tags_names))
+  # print('-'*50)
+  mlb = preprocessing.MultiLabelBinarizer(classes=uniq_tags_names)
+  # print('Y_train : {}'.format(Y_train))
+  Y_train = mlb.fit_transform(Y_train)
+  Y_test = mlb.fit_transform(Y_test)
+  # print('Y_train {}'.format(Y_train))
+  # print('-'*50)
+  # print('Y_test {}'.format(Y_test))
+  # print('-'*50)
+  # print('Y_train back : {}'.format(mlb.inverse_transform(Y_train)))
+  # print('-'*50)
+  # print('Y_test back : {}'.format(mlb.inverse_transform(Y_test)))
+
+  classifier = OneVsRestClassifier(SVC(kernel='linear'))
+  classifier.fit(X_v_train, Y_train)
+  score = classifier.score(X_v_test, Y_test)
+  print('OneVsRestClassifier + LogisticRegression')
+  print('-' * 50)
+  print('Score : {}'.format(score))
+  print('-' * 50)
+  Y_pred = classifier.predict(X_v_test)
+  print('Pred labels')
+  print('-' * 50)
+  Y_back = mlb.inverse_transform(Y_pred)
+  print(Y_back)
+  print('-' * 50)
+
+
+
+def oneVsRest_LogReg(X_train, X_test, Y_train, Y_test, word_dict, tags_dict ):
+  original_labels = Y_test
+  print('Oroginal Labels')
+  print(original_labels)
+  print('-' * 50)
+
+  vectorizer = CountVectorizer(min_df=1, vocabulary=word_dict)
+  X_v_train = vectorizer.fit_transform(X_train)
+  X_v_test = vectorizer.fit_transform(X_test)
+
+  # print('X_vect_train shape : {}'.format(X_v_train.shape))
+  # print('X_v_train {}'.format(X_v_train.toarray()))
+  # print('-'*50)
+  # print('X_vect_test shape : {}'.format(X_v_test.shape))
+  # print('X_v_test {}'.format(X_v_test.toarray()))
+  # print('-'*50)
+
+  uniq_tags_names = list(tags_dict.keys())
+
+  # print('unique {}'.format(uniq_tags_names))
+  # print('-'*50)
+  mlb = preprocessing.MultiLabelBinarizer(classes=uniq_tags_names)
+  # print('Y_train : {}'.format(Y_train))
+  Y_train = mlb.fit_transform(Y_train)
+  Y_test = mlb.fit_transform(Y_test)
+  # print('Y_train {}'.format(Y_train))
+  # print('-'*50)
+  # print('Y_test {}'.format(Y_test))
+  # print('-'*50)
+  # print('Y_train back : {}'.format(mlb.inverse_transform(Y_train)))
+  # print('-'*50)
+  # print('Y_test back : {}'.format(mlb.inverse_transform(Y_test)))
+
+  classifier = OneVsRestClassifier(LogisticRegression(penalty='l2', C=0.01))
+  classifier.fit(X_v_train, Y_train)
+  score = classifier.score(X_v_test, Y_test)
+  print('-' * 50)
+  print('Score : {}'.format(score))
+  print('-' * 50)
+  Y_pred = classifier.predict(X_v_test)
+  print('Pred labels')
+  print('-' * 50)
+  Y_back = mlb.inverse_transform(Y_pred)
+  print(Y_back)
+  print('-' * 50)
+
+def main_two():
+  X, Y = readTrainingDataSet()
+  X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+  print('X_train shape : {}'.format(X_train.shape))
+  print('X_test shape : {}'.format(X_test.shape))
+  print('Y_train shape : {}'.format(Y_train.shape))
+  print('Y_test shape : {}'.format(Y_test.shape))
+
   word_dict = {}
   for x in X_train:
     for w in x.split():
-      if(w not in word_dict):
+      if (w not in word_dict):
         word_dict[w] = len(word_dict)
 
   for x in X_test:
@@ -120,42 +215,24 @@ def main():
       if (w not in word_dict):
         word_dict[w] = len(word_dict)
 
-  uniq_words = len(word_dict)
-
-  # print('Unique words : {}'.format(uniq_words))
-  vectorizer = CountVectorizer(min_df=1, vocabulary = word_dict)
-  X_v_train = vectorizer.fit_transform(X_train)
-  X_v_test = vectorizer.fit_transform(X_test)
-
-  # print('X_vect_train shape : {}'.format(X_v_train.shape))
-  # print(X_v_train.toarray())
-  # print('X_vect_test shape : {}'.format(X_v_test.shape))
-  # print(X_v_test.toarray())
-
   tags_dict = {}
   for y in Y_train:
     # print(y)
     for t in y:
-      if (t not in tags_dict ):
-        tags_dict[t] = len(tags_dict )
-  uniq_tags = len(tags_dict )
-  # print('Unique tags : {}'.format(uniq_tags))
+      if (t not in tags_dict):
+        tags_dict[t] = len(tags_dict)
 
+  for y in Y_test:
+    # print(y)
+    for t in y:
+      if (t not in tags_dict):
+        tags_dict[t] = len(tags_dict)
   uniq_tags_names = list(tags_dict.keys())
-  # print(uniq_tags_names)
-  mlb = preprocessing.MultiLabelBinarizer(classes=uniq_tags_names)
-  # print(Y_train)
-  Y_train = mlb.fit_transform(Y_train)
+  uniq_tags_no = len(tags_dict)
+  print('Unique tags : {}'.format(uniq_tags_no))
 
-  classifier = OneVsRestClassifier(SVC(kernel='linear'))
-  classifier.fit(X_v_train,Y_train)
-
-  Y_pred = classifier.predict(X_v_test)
-  # print(Y_pred)
-  print('Pred labels')
-  Y_back = mlb.inverse_transform(Y_pred)
-  print(Y_back)
-
+  oneVsRest_LogReg(X_train, X_test, Y_train, Y_test, word_dict, tags_dict)
+  oneVsRest_SVCLinear(X_train, X_test, Y_train, Y_test, word_dict, tags_dict)
 
 if __name__ == '__main__':
-  main()
+  main_two()
