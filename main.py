@@ -69,7 +69,7 @@ def readTrain(file):
 
 def readTrainingDataSet():
   files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
-  #files = ['./data/cooking_short.csv','./data/crypto_short.csv']
+  # files = ['./data/cooking_short.csv','./data/crypto_short.csv']
   train_data_frames = []
   for f in files:
     train_data_frames.append(readTrain(f))
@@ -151,7 +151,7 @@ def create_csr_matrix(coo_cols_array,coo_rows_array,coo_vals_array, rows, cols):
 from sklearn.decomposition import TruncatedSVD
 def svd_dr(X):
   print('Old Shape : {}'.format(X.shape))
-  svd = TruncatedSVD(n_components=10000, n_iter=7, random_state=42)
+  svd = TruncatedSVD(n_components=500, n_iter=7, random_state=42)
   svd.fit(X)
   print(svd.explained_variance_ratio_)
   X_new = svd.fit_transform(X)
