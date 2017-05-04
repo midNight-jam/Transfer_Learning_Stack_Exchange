@@ -1,0 +1,37 @@
+"id","title","content","tags"
+"3","What are the benefits of the two permutation tables in DES?","<p>Why do we use a permutation table in the first step of <a href=""http://en.wikipedia.org/wiki/Data_Encryption_Standard"" rel=""nofollow"">DES algorithm</a> and one at the end of the algorithm?</p>
+","block-cipher des permutation"
+"7","Why use a 1-2 Oblivious Transfer instead of a 1 out of n Oblivious Transfer?","<p>When initiating an <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer"">oblivious transfer</a>, why would someone use a <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer#1-2_oblivious_transfer"">1-2 oblivious transfer</a> rather than going for an <a href=""http://en.wikipedia.org/wiki/Oblivious_transfer#1-out-of-n_oblivious_transfer_and_k-out-of-n_oblivious_transfer"">1 out of n oblivious transfer</a>? Perhaps a slight time overhead for the extra message encrypts, but with everything as fast as it is these days is that a concern?</p>
+","oblivious-transfer multiparty-computation function-evaluation"
+"9","What is the general justification for the hardness of finding preimages for cryptographic hash functions?","<p>Since most cryptographic hash functions are simple, compact constructions does this simplicity impose a limit on the complexity and the size of a function that can generate preimages? That is, given a cryptographic hash function, <strong>H</strong> of some length and complexity can we lower or upper bound the complexity/size of a function that finds preimages of <strong>H</strong>. If not, why not?</p>
+
+<p>If the upper bound on the size of a function that efficiently finds a preimage of <strong>H</strong> is smaller than the output size of <strong>H</strong> and then this has implications for the strength of the hash function. How can we justify that such an efficient preimage finding function must be larger than the output size?</p>
+","hash cryptanalysis preimage-resistance"
+"16","How were the DES S-box values determined?","<p>It seems like the S-boxes in <a href=""http://en.wikipedia.org/wiki/Data_Encryption_Standard"">DES</a> have essentially random values.</p>
+
+<p>How were these chosen?</p>
+","des encryption s-boxes"
+"17","How to provide secure ""vanity"" bitcoin address service?","<p><a href=""http://www.bitcoin.org/"" rel=""nofollow"">Bitcoin</a> addresses are RIPEMD-160 hashes of the public portion of a public/private ECDSA keypair (along with an abbreviated hash of the hash to provide a check code, as @pulpspy notes in a comment).  They are generally base-58-encoded.  See <a href=""https://en.bitcoin.it/wiki/Address"" rel=""nofollow"">Address - Bitcoin</a></p>
+
+<p>In <a href=""http://forum.bitcoin.org/index.php?topic=1387.msg15868#msg15868"" rel=""nofollow""><em>Vanity bitcoin addresses: a new way to keep your CPU busy</em></a>, user ""ByteCoin"" says he can create and sell ""vanity"" bitcoin addresses (like <code>1ByteCoinsUNJun4KL3HSt1NfFdXpzoRTy</code>) for people.  Furthermore, he states he can use a handshake algorithm to do so without actually getting access to the associated private key (and thus without being able to spend bitcoins which are sent to the address).</p>
+
+<p>What is a fast algorithm for creating vanity bitcoin addresses?  Can they in fact be created and sold in a secure way?</p>
+","dsa bitcoin digital-cash ripemd"
+"18","How can a random salt for a hash function work in practice?","<p>I understand the theory behind the use salts in hash functions, but when I see it  implemented, the implementations always generate the salt on the fly and the salt appears to be different for every hash. </p>
+
+<ul>
+<li><p>When implementing a salt for users signing into a website, doesn't the salt need to be the same at account creation as the salt used when the user wants to log in? </p></li>
+<li><p>In implementation, wouldn't the salt be the same every time? </p></li>
+<li><p>I understand that the salt may be different from user to user (in my example), but when user A signs in on Monday, and again on Friday, wouldn't the salt need to be the same for both those times?</p></li>
+</ul>
+","hash implementation salt"
+"20","What are the practical differences between 256-bit, 192-bit, and 128-bit AES encryption?","<p>AES has several different variants:</p>
+
+<ul>
+<li>AES-128</li>
+<li>AES-192</li>
+<li>AES-256</li>
+</ul>
+
+<p>But why would someone prefer use one over another?</p>
+","encryption aes block-cipher key-size"
