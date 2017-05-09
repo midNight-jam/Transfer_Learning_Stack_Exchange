@@ -78,12 +78,12 @@ def readTrain(file):
   return data_frame
 
 def readTrainingDataSet():
-  files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
+  # files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv','./data/diy.csv','./data/robotics.csv','./data/travel.csv']
   # files = ['./data/biology.csv','./data/cooking.csv','./data/crypto.csv']
   # files = ['./data/biology.csv']
   # files = ['./data/cooking_short.csv', './data/crypto_short.csv']
   # files = ['./data/cooking_short_train.csv']
-  # files = ['./data/crypto_short.csv']
+  files = ['./data/crypto_short.csv']
   # files = ['./data/tiny.csv']
   train_data_frames = []
   for f in files:
@@ -414,8 +414,8 @@ def oneVsRest_Pipeline(X_train, X_test, Y_train, Y_test,  tags_dict, words_dict,
   print('X_v_test.shape : {}'.format(X_v_test.shape))
   print('words chck : {}'.format(len(words_dict)))
 
-  uniq_tags_names = list(tags_dict.keys())
-  print('tags chck : {}'.format(len(uniq_tags_names)))
+  # uniq_tags_names = list(tags_dict.keys())
+  # print('tags chck : {}'.format(len(uniq_tags_names)))
 
   # mlb = preprocessing.MultiLabelBinarizer(classes=uniq_tags_names)
   mlb = preprocessing.MultiLabelBinarizer()
@@ -455,10 +455,12 @@ def oneVsRest_Pipeline(X_train, X_test, Y_train, Y_test,  tags_dict, words_dict,
   print('Ypred shape :{}'.format(Y_pred.shape))
   print('Y val : \n{}'.format(Y_pred.toarray()))
 
-  print(Y_pred[0])
+  # print(Y_pred[0])
+  # print('dense 0 : {}'.format(Y_pred[0]))
   # res = ''.join(Y_pred[0].toarray())
   # print('res : {}'.format(res))
   Y_back = mlb.inverse_transform(Y_pred)
+  print('-' * 50)
   print(Y_back)
 
   # temp = accuracy_score(y_test, predicted, normalize=True)
@@ -472,6 +474,36 @@ def oneVsRest_Pipeline(X_train, X_test, Y_train, Y_test,  tags_dict, words_dict,
 
   # write_to_file(Y_original, None, 'oneVsRest_Pipeline_BINREL', score, data_files)
 
+
+def output_labels():
+  pass
+  # inverse_tags_dict = {}
+  # for k in tags_dict:
+  #   val = tags_dict[k]
+  #   if(val not in inverse_tags_dict):
+  #     inverse_tags_dict[val] = k
+  #
+  # print('tags_dcit len : {}'.format(len(tags_dict)))
+  # print('Inverse tags_dcit len : {}'.format(len(inverse_tags_dict)))
+  #
+  # Y_dense = Y_pred.toarray()
+  # index = 0
+  # pred_dict = {}
+  # for y in Y_dense:
+  #   pred_Tags = []
+  #   for c in range(len(y)):
+  #     if(y[c] == 1):
+  #       pred_Tags.append(c)
+  #   tags_Str = ''
+  #   for i in range(len(pred_Tags)):
+  #     tags_Str +=' '+inverse_tags_dict[i]
+  #   pred_dict[index] = tags_Str
+  #   index += 1
+  #   break
+  #
+  # print(X_train[0])
+  # print(Y_original[0])
+  # print(pred_dict[0])
 
 import  operator
 def get_absolute_train_data(X, Y):
@@ -494,27 +526,27 @@ def get_absolute_train_data(X, Y):
       tags_freq[t].append(docId)
     docId += 1
 
-  train_data_ids = []
+  train_doc_ids = []
   for k in tags_freq:
-    train_data_ids.append(tags_freq[k][0])
+    train_doc_ids.append(tags_freq[k][0])
     # print('tag : {} , occ docs  :{}'.format(k, len(tags_freq[k])))
 
-  # threshold = 1
-  # filtered_tags = {}
-  # filtered_tags_doc_freq = {}
-  # filtered_doc_ids = set()
-  # for k in tags_freq:
-  #   if(len(tags_freq[k]) > threshold):
-  #     filtered_tags[k] = len(filtered_tags)
-  #     if(k not in filtered_tags_doc_freq):
-  #       filtered_tags_doc_freq[k] = set()
-  #       for i in tags_freq[k]:
-  #         filtered_tags_doc_freq[k].add(i)
-  #     for i in tags_freq[k]:
-  #       filtered_doc_ids.add(i)
-  #
-  # for k in filtered_tags_doc_freq:
-  #   print('ft : {}, dfq : {}'.format(k, len(filtered_tags_doc_freq[k])))
+  filtered_tags = {}
+  train_docs = set()
+  test_docs = set()
+
+  for k in tags_freq:
+    doc_freq = len(tags_freq[k])
+    if(doc_freq % 2 == 0):
+      trains = tags_freq[k][:doc_freq/2]
+      for t in trains:
+        train_docs.add(t)
+      tests = tags_freq[k][doc_freq/2:]
+      for t in tests:
+        test_docs.add(t)
+      test_docs.union(tests)
+      filtered_tags[k] = len(filtered_tags)
+
 
   # print('abs_train shape : {}'.format(X_abs_train.shape))
   # print('filtered tags : {}'.format(len(filtered_tags)))
@@ -525,14 +557,39 @@ def get_absolute_train_data(X, Y):
   # X_abs_train = X[filtered_doc_ids]
   # Y_abs_train = Y[filtered_doc_ids]
 
-  X_abs_train = X[train_data_ids]
-  Y_abs_train = Y[train_data_ids]
+  train_doc_ids = list(train_docs)
+  test_doc_ids = list(test_docs)
 
-  return X_abs_train, Y_abs_train, tags_dict, words_dict
+  print('train doc: {}'.format(train_doc_ids))
+  print('test doc :{} '.format(test_doc_ids))
+
+
+  X_abs_train = X[train_doc_ids]
+  Y_abs_train = Y[train_doc_ids]
+
+  X_abs_test = X[test_doc_ids]
+  Y_abs_test = Y[test_doc_ids]
+
+  return X_abs_train, Y_abs_train, X_abs_test, Y_abs_test, tags_dict, words_dict
+
+
+def removeNonIntersection(y_row, intersect_dict):
+  print('B4 : {}'.format(y_row))
+  filtered_y = []
+  for tag in y_row:
+    # print(t, t in intersection)
+    if ((tag in intersect_dict) == True):
+      # print('removing : {}'.format(t))
+      filtered_y.append(tag)
+
+  filtered_y = np.array(filtered_y)
+  print('AF : {}'.format(filtered_y))
+  return filtered_y
+
 
 def main_two():
-  # X, Y , data_files = readTrainingDataSet()
-  X, Y = readPreProcessedData()
+  X, Y , data_files = readTrainingDataSet()
+  # X, Y = readPreProcessedData()
 
 
   print('Original shape X : {} Y: {}'.format(X.shape, Y.shape))
@@ -540,28 +597,87 @@ def main_two():
   # X_train , Y_train, tags_dict, words_dict = get_absolute_train_data(X_train, Y_train)
   # X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, test_size=0.1, random_state=42)
 
-  X_s_train, Y_s_train, tags_dict, words_dict = get_absolute_train_data(X, Y)
+  X_s_train, Y_s_train, X_s_test, Y_s_test, tags_dict, words_dict = get_absolute_train_data(X, Y)
   print('absolute  (after filtering) shape X : {} Y: {}'.format(X.shape, Y.shape))
 
-  print('-'*50)
+  print(type(Y_s_train[0]))
+  # print('-'*50)
   # print(X_s_train)
+  print('-' * 50)
+  print(Y_s_train)
+  print('-' * 50)
+  print(Y_s_test)
 
-  # print('-' * 50)
-  # print(Y_s_train)
+  y_train_Set = set()
+  for y_row in Y_s_train:
+    for t in y_row:
+      y_train_Set.add(t)
 
-  for i in range(len(X_s_train)):
-    print(X_s_train[i], Y_s_train[i])
+
+  y_test_Set = set()
+  for y_row in Y_s_test:
+    for t in y_row:
+      y_test_Set.add(t)
+
+
+  intersection = y_train_Set.intersection(y_test_Set)
+  tags_dict = intersection
+  print('-' * 50)
+  print('intersection set : ',intersection)
+  print('intersection  Len {}'.format(len(intersection)))
+
+
+  print('-' * 50)
+  # cleaning testing set
+  for index in range(len(Y_s_train)):
+    # print('-' * 50)
+    # print('tyep : {}'.format(type(y_row)))
+    # print('before cleaning  :{}'.format(y_row))
+    # print('Before : {}'.format(Y_s_train[index]))
+    filtered_row = list()
+    for tag in Y_s_train[index]:
+      # print(t, t in intersection)
+      if ((tag in intersection) == True):
+        # print('removing : {}'.format(t))
+        filtered_row.append(tag)
+    # print('after cleaning  : {}'.format(y_row))
+    Y_s_train[index] = filtered_row
+    # print('After : {}'.format(Y_s_train[index]))
+
+  print(Y_s_train)
+
+  print('-' * 50)
+  # cleaning testing set
+  for index in range(len(Y_s_test)):
+    # print('-' * 50)
+    # print('tyep : {}'.format(type(y_row)))
+    # print('before cleaning  :{}'.format(y_row))
+    # print('Before : {}'.format(Y_s_test[index]))
+    filtered_row = list()
+    for tag in Y_s_test[index]:
+      # print(t, t in intersection)
+      if ((tag in intersection) == True):
+        # print('removing : {}'.format(t))
+        filtered_row.append(tag)
+    # print('after cleaning  : {}'.format(y_row))
+        Y_s_test[index] = filtered_row
+    # print('After : {}'.format(Y_s_test[index]))
+
+  print(Y_s_test)
+
+  # for i in range(len(X_s_train)):
+  #   print(X_s_train[i], Y_s_train[i])
 
 
 
   # X_train, X_test, Y_train, Y_test = train_test_split(X_s_train, Y_s_train, test_size=0.1, random_state=42)
-  X_train, X_test, Y_train, Y_test = train_test_split(X_s_train, Y_s_train, test_size=0.3)
+  # X_train, X_test, Y_train, Y_test = train_test_split(X_s_train, Y_s_train, test_size=0.3)
 
   print('-'*50)
-  print('X_train shape : {}'.format(X_train.shape))
-  print('Y_train shape : {}'.format(Y_train.shape))
-  print('X_test shape : {}'.format(X_test.shape))
-  print('Y_test shape : {}'.format(Y_test.shape))
+  print('X_train shape : {}'.format(X_s_train.shape))
+  print('Y_train shape : {}'.format(Y_s_train.shape))
+  print('X_test shape : {}'.format(X_s_test.shape))
+  print('Y_test shape : {}'.format(Y_s_test.shape))
   print('words count : {}'.format(len(words_dict)))
   print('tags count : {}'.format(len(tags_dict)))
 
@@ -619,7 +735,7 @@ def main_two():
   # end = time.time()
   # print('Execution time : {} secs'.format(end-start))
 
-  oneVsRest_Pipeline(X_train, X_test, Y_train, Y_test, tags_dict, words_dict, data_files)
+  oneVsRest_Pipeline(X_s_train, X_s_test, Y_s_train, Y_s_test, tags_dict, words_dict, data_files)
   # oneVsRest_Pipeline_Try(X_train, X_test, Y_train, Y_test, word_dict, tags_dict, data_files)
 
 if __name__ == '__main__':
